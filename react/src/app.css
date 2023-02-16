@@ -1,0 +1,66 @@
+:root {
+    color: #333;
+    font-family: 'IBM Plex Sans', sans-serif;
+    --default-card-colour: #e9ebf7;
+}
+
+body {
+    margin: 0;
+}
+
+h1 {
+    text-transform: uppercase;
+    font-size: 1.25rem;
+}
+
+div#root {
+    background: #f8f8f8;
+    padding: 1rem;
+}
+
+.dashboardCard {
+    display: grid;
+    gap: 1rem;
+}
+
+.dashboardCard h1 {
+    margin: 0
+}
+
+.dashboardCard,
+.roundedCard {
+    border-radius: 1rem;
+    padding: 1.5rem;
+}
+
+.gridChart {
+    display: grid;
+    gap: 3px;
+    width: max-content;
+    height: max-content;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+}
+
+.gridChart,
+.gridChart li {
+    margin: 0;
+    padding: 0;
+}
+
+.gridChart li {
+    height: var(--dot-size);
+    width: var(--dot-size);
+    background: #ffab03;
+    display: inline-block;
+}
+
+legend{
+    font-size: 0.8rem;
+    margin: 0.5rem 0;
+}
+legend div{
+    height: 0.5rem;
+    width: 0.5rem;
+    display: inline-block
+}
