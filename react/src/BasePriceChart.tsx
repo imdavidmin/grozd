@@ -2,18 +2,19 @@ import React from 'react'
 import { ResponsiveContainer, LineChart, Line, BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 
 export function BasePriceChart(props) {
-    const data = props.data.map(([fee, ts]) => { return { 'Base fee': fee, label: ts } })
-    console.log(data)
+    const data = props.data.map(([fee, ts]) => { return { 'Base fee': fee, ts: ts, label: Date.parse(ts) } })
+
     return (
         <ResponsiveContainer width="100%" height={300}>
             <LineChart data={data} margin={{ top: 15, right: 0, bottom: 15, left: 0 }}>
-                <Tooltip />
+                <Tooltip labelFormatter={ts => (new Date(ts)).toLocaleString()} />
+                <XAxis dataKey="ts" scale="time" type="number" domain={['dataMin', 'dataMax']}
+                    hide={true} />
                 <YAxis />
                 <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                 <Line type="monotone" dataKey="Base fee" stroke="#FB8833" dot={false} />
             </LineChart>
         </ResponsiveContainer>
-
     )
 }
 

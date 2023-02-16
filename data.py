@@ -1,16 +1,15 @@
 from sqlalchemy import create_engine, text
 from datetime import datetime, timedelta
-from pandas import DataFrame, read_sql_query, Series, Timestamp
+from pandas import DataFrame, read_sql_query, Series
 from flask import request
-import json
 import numpy
+
+DB_CONNECTION_STRING = "postgresql://worker:v2_3z7vi_p2JBRtSyvrpQzEUzgcBUdvb@db.bit.io:5432/imdavidmin/grozd"
+engine = create_engine(DB_CONNECTION_STRING, pool_pre_ping=True)
 
 
 def getDashboardData():
-    DB_CONNECTION_STRING = "postgresql://worker:v2_3z7vi_p2JBRtSyvrpQzEUzgcBUdvb@db.bit.io:5432/imdavidmin/grozd"
-    engine = create_engine(DB_CONNECTION_STRING, pool_pre_ping=True)
-
-    lookback_days = request.args.get('lookback') or 30
+    lookback_days = 30
     max_records = 10000
 
     with engine.connect() as db:
@@ -28,8 +27,8 @@ def getDashboardData():
             now[col] = int(df.at[0, col])
 
         # Get time series for base
-        base = df[['base', 'timestamp']].astype({'timestamp': int})
-        base['timestamp'] = base['timestamp'].div(1000).astype(int)
+        base = df[['base', 'timestamp']].astype({'timestamp': "int64"})
+        base['timestamp'] = base['timestamp'].floordiv(1000000).astype(int)
 
         return {
             "avg": getAvgs(df),
@@ -38,18 +37,20 @@ def getDashboardData():
         }
 
 # Calculate the average for each hour on each day
+
+
 def getAvgs(df: DataFrame):
     avgs = {"base": [], "fast": [], "instant": [], "standard": []}
+
+    def getMean(series: Series):
+        m = series.mean()
+        return round(m, 2) if not numpy.isnan(m) else 0
 
     for d in range(6):
         base = []
         fast = []
         instant = []
         standard = []
-
-        def getMean(series: Series):
-            m = series.mean()
-            return round(m, 2) if not numpy.isnan(m) else 0
 
         for h in range(23):
             filtered = df[

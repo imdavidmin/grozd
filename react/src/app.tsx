@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client';
 
 import { get } from './common';
@@ -13,8 +13,11 @@ import { BasePriceChart } from './BasePriceChart';
 function App(props) {
     const [data, setData] = useState<DashboardData>()
     const [hasError, setHasError] = useState<string>()
+    
+    useEffect(() => {
+        get.dashboardData(setData, setHasError)
+    }, [])
 
-    get.dashboardData(setData, setHasError)
 
     return data
         ? <>
