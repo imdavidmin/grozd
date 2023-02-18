@@ -1,8 +1,7 @@
 from flask import Flask, send_from_directory, request
-from data import getDashboardData
+from data import getDashboardData, getQuery
 
 app = Flask(__name__)
-
 
 @app.route("/")
 def index():
@@ -14,16 +13,12 @@ def rtn():
     return getDashboardData(), {'Access-Control-Allow-Origin': '*'}
 
 
-@app.route('api/data/query')
-def rtn():
+@app.route('/api/data/query')
+def query():
     result = getQuery(request.args)
     return result['msg'], result['code'], {'Access-Control-Allow-Origin': '*'}
 
 
-def getQuery(args):
-    dfrom = args.get('from')
-    dto = args.get('to')
-    interval = args.get('interval')
 
 # @app.route("/<path:subpath>")
 # def serve(subpath):
